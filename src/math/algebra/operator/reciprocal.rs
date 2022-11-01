@@ -1,4 +1,4 @@
-use rust_decimal::prelude::*;
+use rust_decimal::Decimal;
 
 pub trait Reciprocal {
     type Output;

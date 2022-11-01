@@ -1,3 +1,9 @@
-pub mod concept;
+pub mod algebra;
+pub mod combinatorics;
+pub mod functional;
+pub mod geometry;
 
-pub use concept::*;
+pub use algebra::*;
+pub use combinatorics::*;
+pub use functional::*;
+pub use geometry::*;

@@ -1,4 +1,4 @@
-use super::Arithmetic;
+use super::*;
 use meta_programming::MetaJudgement;
 
 pub trait Variant: Arithmetic {

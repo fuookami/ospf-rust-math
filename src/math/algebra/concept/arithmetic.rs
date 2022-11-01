@@ -1,14 +1,14 @@
-use super::Reciprocal;
+use crate::math::algebra::operator::Reciprocal;
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Rem, Sub, SubAssign};
 
 pub trait Arithmetic: Sized + Clone + PartialOrd + PartialEq {
     fn zero() -> Self;
     fn one() -> Self;
 
-    fn equiv(&self, rhs: &Self) -> bool;
+    fn equiv<Rhs: Arithmetic>(&self, rhs: &Rhs) -> bool;
 }
 
-pub fn equiv<T: Arithmetic>(lhs: &T, rhs: &T) -> bool {
+pub fn equiv<Lhs: Arithmetic, Rhs: Arithmetic>(lhs: &Lhs, rhs: &Rhs) -> bool {
     lhs.equiv(rhs)
 }
 
@@ -20,3 +20,6 @@ pub trait TimesGroup:
     Arithmetic + Reciprocal<Output = Self> + Div<Output = Self> + DivAssign + Rem<Output = Self>
 {
 }
+
+pub trait NumberRing: PlusGroup + TimesSemiGroup {}
+pub trait NumberField: NumberRing + TimesGroup {}
