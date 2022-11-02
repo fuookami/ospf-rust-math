@@ -1,7 +1,7 @@
 use rust_decimal::Decimal;
 
 pub trait Abs {
-    type Output = Self;
+    type Output;
 
     fn abs(&self) -> Self::Output;
 }
@@ -16,7 +16,7 @@ macro_rules! int_abs_template {
             type Output = $type;
 
             fn abs(&self) -> Self::Output {
-                if &self < 0 { -self } else { self.clone() }
+                if *self < 0 { -self } else { self.clone() }
             }
         }
     )*)
@@ -42,7 +42,7 @@ macro_rules! floating_abs_template {
             type Output = $type;
 
             fn abs(&self) -> Self::Output {
-                if &self < 0. { -self } else { self.clone() }
+                if *self < 0. { -self } else { self.clone() }
             }
         }
     )*)

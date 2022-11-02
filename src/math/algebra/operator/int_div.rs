@@ -10,9 +10,9 @@ fn int_div<T: IntDiv>(lhs: &T, rhs: &T) -> T::Output {
     lhs.int_div(rhs)
 }
 
-macro_rules! int_div_template {
+macro_rules! int_int_div_template {
     ($($type:ty)*) => ($(
-        impl InvDiv for $type {
+        impl IntDiv for $type {
             type Output = $type;
 
             fn int_div(&self, rhs: &Self) -> Self::Output {
@@ -21,11 +21,11 @@ macro_rules! int_div_template {
         }
     )*)
 }
-int_div_template! { u8 u16 u32 u64 u128 i8 i16 i32 i64 i128 }
+int_int_div_template! { u8 u16 u32 u64 u128 i8 i16 i32 i64 i128 }
 
-macro_rules! floating_div_template {
+macro_rules! floating_int_div_template {
     ($($type:ty)*) => ($(
-        impl InvDiv for $type {
+        impl IntDiv for $type {
             type Output = $type;
 
             fn int_div(&self, rhs: &Self) -> Self::Output {
@@ -34,4 +34,4 @@ macro_rules! floating_div_template {
         }
     )*)
 }
-floating_div_template! { f32 f64 Decimal }
+floating_int_div_template! { f32 f64 Decimal }
