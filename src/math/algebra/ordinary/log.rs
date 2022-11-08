@@ -9,10 +9,12 @@ pub fn ln<T: RealNumber + NumberField + Pow>(x: &T) -> T {
     let mut val = T::zero();
     let mut base = (x.clone() - T::one()) / (x.clone() + T::one());
     let mut i = T::one();
+    let mut j = base;
     loop {
-        let thisItem = T::one() / (T::two() * i + T::one()) * base;
+        let thisItem = T::one() / (T::two() * i + T::one()) * j;
         val += T::two() * thisItem;
         i += T::one();
+        j *= base * base;
 
         if thisItem <= T::epsilon() {
             break;
