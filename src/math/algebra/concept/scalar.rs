@@ -2,12 +2,11 @@ use super::*;
 use crate::math::algebra::operator::{
     Abs, Cross, Exp, IntDiv, Log, Pow, PowF, RangeTo, Reciprocal,
 };
+use rust_decimal::prelude::FromPrimitive;
 use rust_decimal::Decimal;
 use std::ops::{Div, Mul, Neg, Rem};
 
 pub trait Scalar: Arithmetic + PlusSemiGroup + TimesSemiGroup + Cross + Abs {}
-
-impl<T: Scalar> Precision for T {}
 
 pub trait RealNumber: Scalar + Precision + Invariant {
     fn two() -> Self;
@@ -17,18 +16,6 @@ pub trait RealNumber: Scalar + Precision + Invariant {
     fn minimum() -> Self;
     fn maximum() -> Self;
     fn positive_minimum() -> Self;
-
-    fn decimal_digits() -> Option<usize> {
-        None
-    }
-
-    fn decimal_precision() -> Self {
-        Self::zero()
-    }
-
-    fn epsilon() -> Self {
-        Self::zero()
-    }
 
     fn nan() -> Option<Self> {
         None
@@ -50,7 +37,10 @@ pub trait RealNumber: Scalar + Precision + Invariant {
     }
 
     fn is_neg_inf(&self) -> bool {
-        self == Self::neg_inf()
+        match Self::neg_inf() {
+            Some(inf_value) => *self == inf_value,
+            None => false,
+        }
     }
 }
 
@@ -247,36 +237,116 @@ macro_rules! floating_real_number_template {
                 Some(<$type>::NEG_INFINITY)
             }
         }
-
-        impl FloatingNumber for $type {
-            fn pi() -> Self {
-                <$type>::PI
-            }
-
-            fn e() -> Self {
-                <$type>::E
-            }
-
-            fn floor(&self) -> Self {
-                self.floor()
-            }
-
-            fn ceil(&self) -> Self {
-                self.ceil()
-            }
-
-            fn round(&self) -> Self {
-                self.round()
-            }
-
-            fn trunc(&self) -> Self {
-                self.trunc()
-            }
-
-            fn fract(&self) -> Self {
-                self.fract()
-            }
-        }
     )*)
 }
-floating_real_number_template! { f32 f64 Decimal }
+floating_real_number_template! { f32 f64 }
+
+impl FloatingNumber for f32 {
+    fn pi() -> Self {
+        std::f32::consts::PI
+    }
+
+    fn e() -> Self {
+        std::f32::consts::E
+    }
+
+    fn floor(&self) -> Self {
+        self.floor()
+    }
+
+    fn ceil(&self) -> Self {
+        self.ceil()
+    }
+
+    fn round(&self) -> Self {
+        self.round()
+    }
+
+    fn trunc(&self) -> Self {
+        self.trunc()
+    }
+
+    fn fract(&self) -> Self {
+        self.fract()
+    }
+}
+
+impl FloatingNumber for f64 {
+    fn pi() -> Self {
+        std::f64::consts::PI
+    }
+
+    fn e() -> Self {
+        std::f64::consts::E
+    }
+
+    fn floor(&self) -> Self {
+        self.floor()
+    }
+
+    fn ceil(&self) -> Self {
+        self.ceil()
+    }
+
+    fn round(&self) -> Self {
+        self.round()
+    }
+
+    fn trunc(&self) -> Self {
+        self.trunc()
+    }
+
+    fn fract(&self) -> Self {
+        self.fract()
+    }
+}
+
+impl Arithmetic for Decimal {
+    fn zero() -> Self {
+        Decimal::ZERO
+    }
+
+    fn one() -> Self {
+        Decimal::ONE
+    }
+}
+
+impl Scalar for Decimal {}
+
+impl RealNumber for Decimal {
+    fn two() -> Self {
+        Decimal::TWO
+    }
+
+    fn three() -> Self {
+        Decimal::from_i128(3).unwrap()
+    }
+
+    fn ten() -> Self {
+        Decimal::TEN
+    }
+
+    fn minimum() -> Self {
+        Decimal::MIN
+    }
+
+    fn maximum() -> Self {
+        Decimal::MAX
+    }
+
+    fn positive_minimum() -> Self {
+        Self::epsilon()
+    }
+
+    fn nan() -> Option<Self> {
+        None
+    }
+
+    fn inf() -> Option<Self> {
+        None
+    }
+
+    fn neg_inf() -> Option<Self> {
+        None
+    }
+}

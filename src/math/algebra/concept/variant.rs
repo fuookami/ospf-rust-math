@@ -7,6 +7,12 @@ pub trait Variant: Arithmetic {
     fn value(&self) -> Option<&Self::ValueType> {
         None
     }
+
+    fn equiv(&self, rhs: &Self::ValueType) -> bool;
+}
+
+pub fn equiv<Lhs: Variant>(lhs: &Lhs, rhs: &Lhs::ValueType) -> bool {
+    lhs.equiv(rhs)
 }
 
 pub trait Invariant: Arithmetic {

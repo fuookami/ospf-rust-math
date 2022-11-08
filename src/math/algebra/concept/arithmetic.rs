@@ -4,12 +4,6 @@ use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Rem, Sub, SubAssi
 pub trait Arithmetic: Sized + Clone + PartialOrd + PartialEq {
     fn zero() -> Self;
     fn one() -> Self;
-
-    fn equiv<Rhs: Arithmetic>(&self, rhs: &Rhs) -> bool;
-}
-
-pub fn equiv<Lhs: Arithmetic, Rhs: Arithmetic>(lhs: &Lhs, rhs: &Rhs) -> bool {
-    lhs.equiv(rhs)
 }
 
 pub trait PlusSemiGroup: Arithmetic + Add<Output = Self> + AddAssign {}

@@ -1,3 +1,4 @@
+use crate::math::ordinary;
 use rust_decimal::Decimal;
 
 pub trait Log<Base = Self> {
@@ -73,4 +74,24 @@ macro_rules! floating_log_template {
         }
     )*);
 }
-floating_log_template! { f32 f64 Decimal }
+floating_log_template! { f32 f64 }
+
+impl Log for Decimal {
+    type Output = Self;
+
+    fn log(&self, base: &Self) -> Self::Output {
+        ordinary::log(base, self)
+    }
+
+    fn lg2(&self) -> Self::Output {
+        ordinary::lg2(self)
+    }
+
+    fn lg(&self) -> Self::Output {
+        ordinary::lg10(self)
+    }
+
+    fn ln(&self) -> Self::Output {
+        ordinary::ln(self)
+    }
+}

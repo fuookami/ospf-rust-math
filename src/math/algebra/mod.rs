@@ -18,5 +18,3 @@ pub use value_range::*;
 
 // algorithms
 pub mod ordinary;
-
-pub use ordinary::*;

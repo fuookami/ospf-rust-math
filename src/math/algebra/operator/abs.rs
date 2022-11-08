@@ -47,4 +47,12 @@ macro_rules! floating_abs_template {
         }
     )*)
 }
-floating_abs_template! { f32 f64 Decimal }
+floating_abs_template! { f32 f64 }
+
+impl Abs for Decimal {
+    type Output = Self;
+
+    fn abs(&self) -> Self::Output {
+        self.abs()
+    }
+}
