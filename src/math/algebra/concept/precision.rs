@@ -1,6 +1,5 @@
 use super::Arithmetic;
 use rust_decimal::prelude::*;
-use rust_decimal::Decimal;
 
 pub trait Precision: Arithmetic {
     fn epsilon() -> Self;

@@ -1,23 +1,25 @@
-use crate::math::algebra::concept::{RealNumber, TimesGroup, TimesSemiGroup};
+use crate::{math::algebra::concept::{RealNumber, TimesGroup, TimesSemiGroup}, FloatingNumber};
+use super::ln;
+use std::ops::Neg;
 
-pub(self) fn powPosImpl<T: TimesSemiGroup>(value: T, base: &T, index: i64) -> T {
+pub(self) fn pow_pos_impl<T: TimesSemiGroup>(value: T, base: T, index: i64) -> T {
     if index == 0 {
         T::one()
     } else {
-        powPosImpl(value * base.clone(), base, index - 1)
+        pow_pos_impl(value * base.clone(), base, index - 1)
     }
 }
 
-pub(self) fn powNegImpl<T: TimesGroup>(value: T, base: &T, index: i64) -> T {
+pub(self) fn pow_neg_impl<T: TimesGroup>(value: T, base: T, index: i64) -> T {
     if index == 0 {
         T::one()
     } else {
-        powNegImpl(value / base.clone(), base, index + 1)
+        pow_neg_impl(value / base.clone(), base, index + 1)
     }
 }
 
 #[derive(Debug)]
-struct NegativeIndexError<T: std::fmt::Debug> {
+pub struct NegativeIndexError<T: std::fmt::Debug> {
     index: i64,
     _marker: std::marker::PhantomData<T>,
 }
@@ -43,11 +45,11 @@ impl<T: std::fmt::Debug> std::fmt::Display for NegativeIndexError<T> {
 }
 
 pub(crate) fn pow_times_semi_group<T: RealNumber + TimesSemiGroup + std::fmt::Debug>(
-    base: &T,
+    base: T,
     index: i64,
 ) -> Result<T, NegativeIndexError<T>> {
     if index >= 1 {
-        Ok(powPosImpl(T::one().clone(), base, index))
+        Ok(pow_pos_impl(T::one().clone(), base, index))
     } else if index <= -1 {
         Err(NegativeIndexError::new(index))
     } else {
@@ -56,14 +58,39 @@ pub(crate) fn pow_times_semi_group<T: RealNumber + TimesSemiGroup + std::fmt::De
 }
 
 pub(crate) fn pow_times_group<T: RealNumber + TimesGroup + std::fmt::Debug>(
-    base: &T,
+    base: T,
     index: i64,
 ) -> T {
     if index >= 1 {
-        powPosImpl(T::one().clone(), base, index)
+        pow_pos_impl(T::one(), base, index)
     } else if index <= -1 {
-        powNegImpl(T::one().clone(), base, index)
+        pow_neg_impl(T::one(), base, index)
     } else {
         T::one().clone()
+    }
+}
+
+pub fn exp<T: FloatingNumber>(index: T) -> T {
+    let mut value = T::one();
+    let mut base = index.clone();
+    let mut i = T::one();
+    loop {
+        let this_item = base.clone() / i.clone();
+        value += this_item.clone();
+        base *= index.clone();
+        i += T::one();
+
+        if this_item <= T::epsilon() {
+            break
+        }
+    }
+    value
+}
+
+pub fn powf<T: FloatingNumber + Neg<Output = T>>(base: T, index: T) -> Option<T> {
+    if let Some(ln_base) = ln(base) {
+        Some(exp(index * ln_base))
+    } else {
+        T::nan()
     }
 }

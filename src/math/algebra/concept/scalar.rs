@@ -251,23 +251,23 @@ impl FloatingNumber for f32 {
     }
 
     fn floor(&self) -> Self {
-        self.floor()
+        (*self).floor()
     }
 
     fn ceil(&self) -> Self {
-        self.ceil()
+        (*self).ceil()
     }
 
     fn round(&self) -> Self {
-        self.round()
+        (*self).round()
     }
 
     fn trunc(&self) -> Self {
-        self.trunc()
+        (*self).trunc()
     }
 
     fn fract(&self) -> Self {
-        self.fract()
+        (*self).fract()
     }
 }
 
@@ -281,23 +281,23 @@ impl FloatingNumber for f64 {
     }
 
     fn floor(&self) -> Self {
-        self.floor()
+        (*self).floor()
     }
 
     fn ceil(&self) -> Self {
-        self.ceil()
+        (*self).ceil()
     }
 
     fn round(&self) -> Self {
-        self.round()
+        (*self).round()
     }
 
     fn trunc(&self) -> Self {
-        self.trunc()
+        (*self).trunc()
     }
 
     fn fract(&self) -> Self {
-        self.fract()
+        (*self).fract()
     }
 }
 
@@ -348,5 +348,35 @@ impl RealNumber for Decimal {
 
     fn neg_inf() -> Option<Self> {
         None
+    }
+}
+
+impl FloatingNumber for Decimal {
+    fn pi() -> Self {
+        Decimal::PI
+    }
+
+    fn e() -> Self {
+        Decimal::E
+    }
+
+    fn floor(&self) -> Self {
+        self.floor()
+    }
+
+    fn ceil(&self) -> Self {
+        self.ceil()
+    }
+
+    fn round(&self) -> Self {
+        self.round()
+    }
+
+    fn trunc(&self) -> Self {
+        self.trunc()
+    }
+
+    fn fract(&self) -> Self {
+        self.fract()
     }
 }

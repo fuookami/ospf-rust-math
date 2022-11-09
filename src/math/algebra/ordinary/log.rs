@@ -1,32 +1,55 @@
-use crate::math::algebra::concept::{NumberField, RealNumber};
-use crate::math::algebra::operator::Pow;
+use crate::math::algebra::concept::FloatingNumber;
+use std::ops::Neg;
 
-pub fn log<T: RealNumber + NumberField + Pow>(base: &T, x: &T) -> T {
-    return ln(x) / ln(base);
-}
-
-pub fn ln<T: RealNumber + NumberField + Pow>(x: &T) -> T {
-    let mut val = T::zero();
-    let mut base = (x.clone() - T::one()) / (x.clone() + T::one());
-    let mut i = T::one();
-    let mut j = base;
-    loop {
-        let thisItem = T::one() / (T::two() * i + T::one()) * j;
-        val += T::two() * thisItem;
-        i += T::one();
-        j *= base * base;
-
-        if thisItem <= T::epsilon() {
-            break;
-        }
+pub fn log<T: FloatingNumber + Neg<Output = T>>(nature: T, x: T) -> Option<T> {
+    if let (Some(ln_nature), Some(ln_x)) = (ln(nature), ln(x)) {
+        Some(ln_x / ln_nature)
+    } else {
+        None
     }
-    val
 }
 
-pub fn lg10<T: RealNumber + NumberField + Pow>(x: &T) -> T {
-    return log(&T::ten(), x);
+pub fn ln<T: FloatingNumber + Neg<Output = T>>(x: T) -> Option<T> {
+    if x <= T::zero() {
+        T::nan()
+    } else {
+        let frac_e = T::e().reciprocal();
+
+        let mut val = T::zero();
+        let mut xp = x;
+        if xp < T::one() {
+            while xp <= frac_e {
+                xp *= T::e();
+                val -= T::one();
+            }
+        } else if xp > T::one() {
+            while xp >= T::e() {
+                xp /= T::e();
+                val += T::one();
+            }
+        }
+        let mut base = xp.clone() - T::one();
+        let mut signed = T::one();
+        let mut i = T::one();
+        loop {
+            let this_item = signed.clone() * base.clone() / i.clone();
+            val += this_item.clone();
+            base *= xp.clone() - T::one();
+            signed = -signed;
+            i += T::one();
+            
+            if this_item <= T::epsilon() {
+                break
+            }
+        }
+        Some(val)
+    }
 }
 
-pub fn lg2<T: RealNumber + NumberField + Pow>(x: &T) -> T {
-    return log(&T::two(), x);
+pub fn lg10<T: FloatingNumber + Neg<Output = T>>(x: T) -> Option<T> {
+    return log(T::ten(), x);
+}
+
+pub fn lg2<T: FloatingNumber + Neg<Output = T>>(x: T) -> Option<T> {
+    return log(T::two(), x);
 }

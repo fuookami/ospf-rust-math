@@ -34,3 +34,9 @@ impl<T: PlusGroup + TimesSemiGroup> NumberRing for T {}
 
 pub trait NumberField: NumberRing + TimesGroup {}
 impl<T: NumberRing + TimesGroup> NumberField for T {}
+
+struct Infinity {}
+const INF: Infinity = Infinity {};
+
+struct NegativeInfinity {}
+const NEG_INF: NegativeInfinity = NegativeInfinity {};

@@ -3,10 +3,10 @@ use rust_decimal::Decimal;
 pub trait Cross<Rhs = Self> {
     type Output;
 
-    fn cross(&self, rhs: &Rhs) -> Self::Output;
+    fn cross(self, rhs: Rhs) -> Self::Output;
 }
 
-fn cross<T: Cross>(lhs: &T, rhs: &T) -> T::Output {
+fn cross<T: Cross>(lhs: T, rhs: T) -> T::Output {
     lhs.cross(rhs)
 }
 
@@ -15,7 +15,7 @@ macro_rules! cross_template {
         impl Cross for $type {
             type Output = $type;
 
-            fn cross(&self, rhs: &Self) -> Self::Output {
+            fn cross(self, rhs: Self) -> Self::Output {
                 return self * rhs
             }
         }

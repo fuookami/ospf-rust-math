@@ -5,7 +5,7 @@ pub trait RangeTo
 where
     Self: Ord + Sized + Clone,
 {
-    fn until(&self, rhs: &Self) -> Range<Self> {
+    fn until(self, rhs: Self) -> Range<Self> {
         Range {
             start: self.clone(),
             end: rhs.clone(),
@@ -16,8 +16,8 @@ where
 macro_rules! int_range_to_template {
     ($($type:ty)*) => ($(
         impl RangeTo for $type {
-            fn until(&self, rhs: &Self) -> Range<Self> {
-                *self..*rhs
+            fn until(self, rhs: Self) -> Range<Self> {
+                self..rhs
             }
         }
     )*)

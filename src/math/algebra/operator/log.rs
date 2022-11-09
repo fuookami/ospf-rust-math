@@ -4,25 +4,25 @@ use rust_decimal::Decimal;
 pub trait Log<Base = Self> {
     type Output;
 
-    fn log(&self, base: &Base) -> Self::Output;
-    fn lg2(&self) -> Self::Output;
-    fn lg(&self) -> Self::Output;
-    fn ln(&self) -> Self::Output;
+    fn log(self, base: Base) -> Option<Self::Output>;
+    fn lg2(self) -> Option<Self::Output>;
+    fn lg(self) -> Option<Self::Output>;
+    fn ln(self) -> Option<Self::Output>;
 }
 
-fn log<Lhs: Log<Rhs>, Rhs>(lhs: &Lhs, rhs: &Rhs) -> Lhs::Output {
+fn log<Lhs: Log<Rhs>, Rhs>(lhs: Lhs, rhs: Rhs) -> Option<Lhs::Output> {
     lhs.log(rhs)
 }
 
-fn lg2<Lhs: Log<Rhs>, Rhs>(lhs: &Lhs) -> Lhs::Output {
+fn lg2<Lhs: Log<Rhs>, Rhs>(lhs: Lhs) -> Option<Lhs::Output> {
     lhs.lg2()
 }
 
-fn lg<Lhs: Log<Rhs>, Rhs>(lhs: &Lhs) -> Lhs::Output {
+fn lg<Lhs: Log<Rhs>, Rhs>(lhs: Lhs) -> Option<Lhs::Output> {
     lhs.lg()
 }
 
-fn ln<Lhs: Log<Rhs>, Rhs>(lhs: &Lhs) -> Lhs::Output {
+fn ln<Lhs: Log<Rhs>, Rhs>(lhs: Lhs) -> Option<Lhs::Output> {
     lhs.ln()
 }
 
@@ -31,20 +31,20 @@ macro_rules! int_log_template {
         impl Log<f64> for $type {
             type Output = f64;
 
-            fn log(&self, base: &f64) -> Self::Output {
-                (*self as f64).log(*base)
+            fn log(self, base: f64) -> Option<Self::Output> {
+                Some((self as f64).log(base))
             }
 
-            fn lg2(&self) -> Self::Output {
-                (*self as f64).log2()
+            fn lg2(self) -> Option<Self::Output> {
+                Some((self as f64).log2())
             }
 
-            fn lg(&self) -> Self::Output {
-                (*self as f64).log10()
+            fn lg(self) -> Option<Self::Output> {
+                Some((self as f64).log10())
             }
 
-            fn ln(&self) -> Self::Output {
-                (*self as f64).ln()
+            fn ln(self) -> Option<Self::Output> {
+                Some((self as f64).ln())
             }
         }
     )*)
@@ -56,20 +56,20 @@ macro_rules! floating_log_template {
         impl Log for $type {
             type Output = Self;
 
-            fn log(&self, base: &Self) -> Self::Output {
-                self.log(base)
+            fn log(self, base: Self) -> Option<Self::Output> {
+                Some(self.log(base))
             }
 
-            fn lg2(&self) -> Self::Output {
-                self.log2()
+            fn lg2(self) -> Option<Self::Output> {
+                Some(self.log2())
             }
 
-            fn lg(&self) -> Self::Output {
-                self.log10()
+            fn lg(self) -> Option<Self::Output> {
+                Some(self.log10())
             }
 
-            fn ln(&self) -> Self::Output {
-                self.ln()
+            fn ln(self) -> Option<Self::Output> {
+                Some(self.ln())
             }
         }
     )*);
@@ -79,19 +79,19 @@ floating_log_template! { f32 f64 }
 impl Log for Decimal {
     type Output = Self;
 
-    fn log(&self, base: &Self) -> Self::Output {
+    fn log(self, base: Self) -> Option<Self::Output> {
         ordinary::log(base, self)
     }
 
-    fn lg2(&self) -> Self::Output {
+    fn lg2(self) -> Option<Self::Output> {
         ordinary::lg2(self)
     }
 
-    fn lg(&self) -> Self::Output {
+    fn lg(self) -> Option<Self::Output> {
         ordinary::lg10(self)
     }
 
-    fn ln(&self) -> Self::Output {
+    fn ln(self) -> Option<Self::Output> {
         ordinary::ln(self)
     }
 }

@@ -3,10 +3,10 @@ use rust_decimal::Decimal;
 pub trait IntDiv<Rhs = Self> {
     type Output;
 
-    fn int_div(&self, rhs: &Rhs) -> Self::Output;
+    fn int_div(self, rhs: Rhs) -> Self::Output;
 }
 
-fn int_div<T: IntDiv>(lhs: &T, rhs: &T) -> T::Output {
+fn int_div<T: IntDiv>(lhs: T, rhs: T) -> T::Output {
     lhs.int_div(rhs)
 }
 
@@ -15,7 +15,7 @@ macro_rules! int_int_div_template {
         impl IntDiv for $type {
             type Output = $type;
 
-            fn int_div(&self, rhs: &Self) -> Self::Output {
+            fn int_div(self, rhs: Self) -> Self::Output {
                 return self / rhs
             }
         }
@@ -28,7 +28,7 @@ macro_rules! floating_int_div_template {
         impl IntDiv for $type {
             type Output = $type;
 
-            fn int_div(&self, rhs: &Self) -> Self::Output {
+            fn int_div(self, rhs: Self) -> Self::Output {
                 return self - self % rhs
             }
         }

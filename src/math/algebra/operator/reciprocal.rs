@@ -3,10 +3,10 @@ use rust_decimal::Decimal;
 pub trait Reciprocal {
     type Output;
 
-    fn reciprocal(&self) -> Self::Output;
+    fn reciprocal(self) -> Self::Output;
 }
 
-fn reciprocal<T: Reciprocal>(value: &T) -> T::Output {
+fn reciprocal<T: Reciprocal>(value: T) -> T::Output {
     value.reciprocal()
 }
 
@@ -15,8 +15,8 @@ macro_rules! int_reciprocal_template {
         impl Reciprocal for $type {
             type Output = $type;
 
-            fn reciprocal(&self) -> Self::Output {
-                return 0
+            fn reciprocal(self) -> Self::Output {
+                0
             }
         }
     )*)
@@ -28,10 +28,18 @@ macro_rules! floating_reciprocal_template {
         impl Reciprocal for $type {
             type Output = $type;
 
-            fn reciprocal(&self) -> Self::Output {
-                return 0. / self
+            fn reciprocal(self) -> Self::Output {
+                1.0 / self
             }
         }
     )*)
 }
-floating_reciprocal_template! { f32 f64 Decimal }
+floating_reciprocal_template! { f32 f64 }
+
+impl Reciprocal for Decimal {
+    type Output = Self;
+
+    fn reciprocal(self) -> Self::Output {
+        Decimal::ONE / self
+    }
+}
