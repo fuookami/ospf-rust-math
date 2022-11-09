@@ -37,9 +37,9 @@ pub fn ln<T: FloatingNumber + Neg<Output = T>>(x: T) -> Option<T> {
             base *= xp.clone() - T::one();
             signed = -signed;
             i += T::one();
-            
+
             if this_item <= T::epsilon() {
-                break
+                break;
             }
         }
         Some(val)

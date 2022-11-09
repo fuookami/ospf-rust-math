@@ -1,4 +1,5 @@
 pub mod arithmetic;
+pub mod bound;
 pub mod precision;
 pub mod scalar;
 pub mod signed;
@@ -7,6 +8,7 @@ pub mod variant;
 pub mod vector;
 
 pub use arithmetic::*;
+pub use bound::*;
 pub use precision::*;
 pub use scalar::*;
 pub use signed::*;

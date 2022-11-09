@@ -1,5 +1,5 @@
 [package]
-name = "ospf_math"
+name = "ospf_rust_math"
 version = "0.1.1"
 authors = ["fuookami <fuookami@163.com>"]
 edition = "2021"
@@ -7,9 +7,11 @@ description = "A math utils for ospf-rust."
 license = "MIT OR Apache-2.0"
 
 [dependencies]
-ospf_meta_programming = { git="https://github.com/fuookami/ospf-rust-meta-programming.git" }
-rust_decimal = { version = "1.26", features = ["maths"] }
-rust_decimal_macros = "1.26"
+ospf_rust_meta_programming = { git="https://github.com/fuookami/ospf-rust-meta-programming.git" }
+rust_decimal = { version = "*", features = ["maths"] }
+rust_decimal_macros = "*"
+rug = "*"
+ibig = "*"
 
 [profile.dev]
 opt-level = 0

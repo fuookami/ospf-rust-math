@@ -1,5 +1,8 @@
-use crate::{math::algebra::concept::{RealNumber, TimesGroup, TimesSemiGroup}, FloatingNumber};
 use super::ln;
+use crate::{
+    math::algebra::concept::{RealNumber, TimesGroup, TimesSemiGroup},
+    FloatingNumber,
+};
 use std::ops::Neg;
 
 pub(self) fn pow_pos_impl<T: TimesSemiGroup>(value: T, base: T, index: i64) -> T {
@@ -81,7 +84,7 @@ pub fn exp<T: FloatingNumber>(index: T) -> T {
         i += T::one();
 
         if this_item <= T::epsilon() {
-            break
+            break;
         }
     }
     value
