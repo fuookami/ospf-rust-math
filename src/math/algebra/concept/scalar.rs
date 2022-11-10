@@ -1,4 +1,5 @@
 use super::*;
+use crate::math::algebra::{ IntX, UIntX };
 use crate::math::algebra::operator::{
     Abs, Cross, Exp, IntDiv, Log, Pow, PowF, RangeTo, Reciprocal,
 };
@@ -6,16 +7,12 @@ use rust_decimal::prelude::FromPrimitive;
 use rust_decimal::Decimal;
 use std::ops::{Div, Mul, Neg, Rem};
 
-pub trait Scalar: Arithmetic + PlusSemiGroup + TimesSemiGroup + Cross + Abs {}
+pub trait Scalar: Arithmetic + PlusSemiGroup + TimesSemiGroup + Bound + Cross + Abs {}
 
 pub trait RealNumber: Scalar + Precision + Invariant {
     fn two() -> Self;
     fn three() -> Self;
     fn ten() -> Self;
-
-    fn minimum() -> Self;
-    fn maximum() -> Self;
-    fn positive_minimum() -> Self;
 
     fn nan() -> Option<Self> {
         None
@@ -51,6 +48,8 @@ pub trait UIntegerNumber: Integer + NumberField + Pow {}
 pub trait RationalNumber<I: Integer + NumberField>:
     RealNumber + NumberField + Log<f64> + PowF<f64> + Exp + Pow + Ord + Eq
 {
+    fn num(&self) -> &I;
+    fn den(&self) -> &I;
 }
 
 pub trait FloatingNumber: RealNumber + NumberField + Log + PowF + Exp + Pow {
@@ -97,13 +96,8 @@ pub trait NumericUIntegerNumber<I: UIntegerNumber>:
 macro_rules! int_real_number_template {
     ($($type:ty)*) => ($(
         impl Arithmetic for $type {
-            fn zero() -> Self {
-                0
-            }
-
-            fn one() -> Self {
-                1
-            }
+            const zero: Self = 0;
+            const one: Self = 1;
         }
 
         impl Scalar for $type {}
@@ -119,18 +113,6 @@ macro_rules! int_real_number_template {
 
             fn ten() -> Self {
                 10
-            }
-
-            fn minimum() -> Self {
-                <$type>::MIN
-            }
-
-            fn maximum() -> Self {
-                <$type>::MAX
-            }
-
-            fn positive_minimum() -> Self {
-                Self::one()
             }
         }
 
@@ -140,16 +122,35 @@ macro_rules! int_real_number_template {
 }
 int_real_number_template! { i8 i16 i32 i64 i128 }
 
+impl Arithmetic for IntX {
+    const zero: Self = IntX::from(0);
+    const one: Self = IntX::from(1);
+}
+
+impl Scalar for IntX {}
+
+impl RealNumber for IntX {
+    fn two() -> Self {
+        IntX::from(2)
+    }
+
+    fn three() -> Self {
+        IntX::from(3)
+    }
+
+    fn ten() -> Self {
+        IntX::from(10)
+    }
+}
+
+impl Integer for IntX {}
+impl IntegerNumber for IntX {}
+
 macro_rules! uint_real_number_template {
     ($($type:ty)*) => ($(
         impl Arithmetic for $type {
-            fn zero() -> Self {
-                0
-            }
-
-            fn one() -> Self {
-                1
-            }
+            const zero: Self = 0;
+            const one: Self = 1;
         }
 
         impl Scalar for $type {}
@@ -166,18 +167,6 @@ macro_rules! uint_real_number_template {
             fn ten() -> Self {
                 10
             }
-
-            fn minimum() -> Self {
-                <$type>::MIN
-            }
-
-            fn maximum() -> Self {
-                <$type>::MAX
-            }
-
-            fn positive_minimum() -> Self {
-                Self::one()
-            }
         }
 
         impl Integer for $type {}
@@ -186,16 +175,35 @@ macro_rules! uint_real_number_template {
 }
 uint_real_number_template! { u8 u16 u32 u64 u128 }
 
+impl Arithmetic for UIntX {
+    const zero: Self = UIntX::from(0);
+    const one: Self = UIntX::from(1);
+}
+
+impl Scalar for UIntX {}
+
+impl RealNumber for UIntX {
+    fn two() -> Self {
+        UIntX::from(2u64)
+    }
+
+    fn three() -> Self {
+        UIntX::from(3u64)
+    }
+
+    fn ten() -> Self {
+        UIntX::from(10u64)
+    }
+}
+
+impl Integer for UIntX {}
+impl IntegerNumber for UIntX {}
+
 macro_rules! floating_real_number_template {
     ($($type:ty)*) => ($(
         impl Arithmetic for $type {
-            fn zero() -> Self {
-                0.
-            }
-
-            fn one() -> Self {
-                1.
-            }
+            const zero: Self = 0.;
+            const one: Self = 1.;
         }
 
         impl Scalar for $type {}
@@ -211,18 +219,6 @@ macro_rules! floating_real_number_template {
 
             fn ten() -> Self {
                 10.
-            }
-
-            fn minimum() -> Self {
-                <$type>::MIN
-            }
-
-            fn maximum() -> Self {
-                <$type>::MAX
-            }
-
-            fn positive_minimum() -> Self {
-                Self::epsilon()
             }
 
             fn nan() -> Option<Self> {
@@ -302,13 +298,8 @@ impl FloatingNumber for f64 {
 }
 
 impl Arithmetic for Decimal {
-    fn zero() -> Self {
-        Decimal::ZERO
-    }
-
-    fn one() -> Self {
-        Decimal::ONE
-    }
+    const zero: Self = Decimal::ZERO;
+    const one: Self = Decimal::ONE;
 }
 
 impl Scalar for Decimal {}
@@ -324,18 +315,6 @@ impl RealNumber for Decimal {
 
     fn ten() -> Self {
         Decimal::TEN
-    }
-
-    fn minimum() -> Self {
-        Decimal::MIN
-    }
-
-    fn maximum() -> Self {
-        Decimal::MAX
-    }
-
-    fn positive_minimum() -> Self {
-        Self::epsilon()
     }
 
     fn nan() -> Option<Self> {

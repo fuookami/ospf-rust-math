@@ -1,5 +1,5 @@
 use super::*;
-use rust_decimal::Decimal;
+use crate::math::algebra::*;
 
 pub trait Variant: Arithmetic {
     type ValueType: Arithmetic;
@@ -32,4 +32,4 @@ macro_rules! invariant_template {
         }
     )*)
 }
-invariant_template! { u8 u16 u32 u64 u128 i8 i16 i32 i64 i128 f32 f64 Decimal }
+invariant_template! { i8 i16 i32 i64 i128 IntX u8 u16 u32 u64 u128 UIntX f32 f64 Decimal }

@@ -7,8 +7,8 @@ where
 {
     fn until(self, rhs: Self) -> Range<Self> {
         Range {
-            start: self.clone(),
-            end: rhs.clone(),
+            start: self.clone,
+            end: rhs.clone,
         }
     }
 }

@@ -1,5 +1,5 @@
-use super::Arithmetic;
-use rust_decimal::prelude::*;
+use super::*;
+use crate::math::algebra::*;
 
 pub trait Precision: Arithmetic {
     fn epsilon() -> Self;
@@ -9,7 +9,7 @@ pub trait Precision: Arithmetic {
 
 default impl<T: Arithmetic> Precision for T {
     fn epsilon() -> Self {
-        Self::zero()
+        Self::zero
     }
 
     fn decimal_digits() -> Option<usize> {
@@ -17,7 +17,7 @@ default impl<T: Arithmetic> Precision for T {
     }
 
     fn decimal_precision() -> Self {
-        Self::zero()
+        Self::zero
     }
 }
 
@@ -26,7 +26,7 @@ macro_rules! int_precision_template {
         impl Precision for $type { }
     )*)
 }
-int_precision_template! { i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 }
+int_precision_template! { i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 IntX UIntX }
 
 impl Precision for f32 {
     fn epsilon() -> Self {

@@ -1,4 +1,4 @@
-use rust_decimal::Decimal;
+use crate::math::algebra::*;
 
 pub trait Abs {
     type Output;
@@ -16,7 +16,7 @@ macro_rules! int_abs_template {
             type Output = $type;
 
             fn abs(&self) -> Self::Output {
-                if *self < 0 { -self } else { self.clone() }
+                if *self < 0 { -self } else { self.clone }
             }
         }
     )*)
@@ -29,7 +29,7 @@ macro_rules! uint_abs_template {
             type Output = $type;
 
             fn abs(&self) -> Self::Output {
-                self.clone()
+                self.clone
             }
         }
     )*)
@@ -42,12 +42,28 @@ macro_rules! floating_abs_template {
             type Output = $type;
 
             fn abs(&self) -> Self::Output {
-                if *self < 0. { -self } else { self.clone() }
+                if *self < 0. { -self } else { self.clone }
             }
         }
     )*)
 }
 floating_abs_template! { f32 f64 }
+
+impl Abs for IntX {
+    type Output = Self;
+
+    fn abs(&self) -> Self::Output {
+        if self < &IntX::from(0) { -self } else { self.clone }
+    }
+}
+
+impl Abs for UIntX {
+    type Output = Self;
+    
+    fn abs(&self) -> Self::Output {
+        self.clone
+    }
+}
 
 impl Abs for Decimal {
     type Output = Self;

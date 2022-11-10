@@ -19,7 +19,6 @@ pub use value_range::*;
 // algorithms
 pub mod ordinary;
 
-type Decimal = rust_decimal::Decimal;
-type IntX = ibig::IBig;
-type UIntX = ibig::UBig;
-type Float = rug::Float;
+pub type Decimal = rust_decimal::Decimal;
+pub type IntX = ibig::IBig;
+pub type UIntX = ibig::UBig;
