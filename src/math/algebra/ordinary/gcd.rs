@@ -4,7 +4,7 @@ use std::ops::Rem;
 pub(self) fn gcd_impl<I: Integer + Abs<Output = I> + Rem<I, Output = I>>(x: I, y: I) -> I {
     let remainder = x % y;
 
-    if remainder == I::zero {
+    if remainder == I::ZERO {
         y
     } else {
         gcd_impl(y, remainder)

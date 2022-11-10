@@ -10,33 +10,33 @@ pub fn log<T: FloatingNumber + Neg<Output = T>>(nature: T, x: T) -> Option<T> {
 }
 
 pub fn ln<T: FloatingNumber + Neg<Output = T>>(x: T) -> Option<T> {
-    if x <= T::zero {
+    if x <= T::ZERO {
         T::nan()
     } else {
         let frac_e = T::e().reciprocal();
 
-        let mut val = T::zero;
+        let mut val = T::ZERO;
         let mut xp = x;
-        if xp < T::one {
+        if xp < T::ONE {
             while xp <= frac_e {
                 xp *= T::e();
-                val -= T::one;
+                val -= T::ONE;
             }
-        } else if xp > T::one {
+        } else if xp > T::ONE {
             while xp >= T::e() {
                 xp /= T::e();
-                val += T::one;
+                val += T::ONE;
             }
         }
-        let mut base = xp.clone - T::one;
-        let mut signed = T::one;
-        let mut i = T::one;
+        let mut base = xp.clone - T::ONE;
+        let mut signed = T::ONE;
+        let mut i = T::ONE;
         loop {
             let this_item = signed.clone * base.clone / i.clone;
             val += this_item.clone;
-            base *= xp.clone - T::one;
+            base *= xp.clone - T::ONE;
             signed = -signed;
-            i += T::one;
+            i += T::ONE;
 
             if this_item <= T::epsilon() {
                 break;

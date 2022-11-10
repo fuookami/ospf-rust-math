@@ -20,5 +20,6 @@ pub use value_range::*;
 pub mod ordinary;
 
 pub type Decimal = rust_decimal::Decimal;
+pub type Flt = num::BigRational;
 pub type IntX = ibig::IBig;
 pub type UIntX = ibig::UBig;

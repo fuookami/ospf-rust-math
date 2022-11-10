@@ -2,8 +2,8 @@ use crate::math::algebra::operator::{Neg, Reciprocal};
 use std::ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Rem, Sub, SubAssign};
 
 pub trait Arithmetic: Sized + Clone + PartialOrd + PartialEq {
-    const zero: Self;
-    const one: Self;
+    const ZERO: Self;
+    const ONE: Self;
 }
 
 pub trait PlusSemiGroup: Arithmetic + Add<Output = Self> + AddAssign {}
