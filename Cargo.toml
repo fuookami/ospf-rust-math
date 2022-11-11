@@ -8,10 +8,8 @@ license = "MIT OR Apache-2.0"
 
 [dependencies]
 ospf_rust_meta_programming = { git="https://github.com/fuookami/ospf-rust-meta-programming.git" }
-rust_decimal = { version = "*", features = ["maths"] }
-rust_decimal_macros = "*"
 num = "*"
-ibig = "*"
+bigdecimal = "*"
 
 [profile.dev]
 opt-level = 0

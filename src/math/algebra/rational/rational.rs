@@ -1,4 +1,9 @@
 use crate::math::algebra::*;
+use std::ops::{ Add, Sub, Mul, Div };
+
+pub(self) trait RationalConstructor<I: Integer> {
+    fn new(num: I, den: I) -> Self;
+}
 
 #[derive(Clone, PartialEq, Eq)]
 pub struct Rational<I: Integer> {
@@ -6,8 +11,18 @@ pub struct Rational<I: Integer> {
     den: I,
 }
 
-impl<I: Integer + Signed> Rational<I> {
-    pub fn new_signed(num: I, den: I) -> Self
+default impl <I: Integer> RationalConstructor<I> for Rational<I> {
+    fn new(num: I, den: I) -> Self {
+        let divisor = ordinary::gcd(num, den);
+        Self {
+            num: num / divisor,
+            den: den / divisor,
+        }
+    }
+}
+
+impl<I: Integer + Signed> RationalConstructor<I> for Rational<I> {
+    fn new(num: I, den: I) -> Self
     {
         let divisor = ordinary::gcd(num, den);
         let negative = (num < I::ZERO) ^ (den < I::ZERO);
@@ -25,25 +40,73 @@ impl<I: Integer + Signed> Rational<I> {
     }
 }
 
-impl<I: Integer + Unsigned> Rational<I> {
-    pub fn new(num: I, den: I) -> Self
-    {
-        let divisor = ordinary::gcd(num, den);
-        Self {
-            num: num / divisor,
-            den: den / divisor,
-        }
-    }
-}
+impl<I: Integer + Copy> Copy for Rational<I> {}
 
-impl<I: Integer + NumberField + Copy> Copy for Rational<I> {}
-
-impl<I: Integer + NumberField + Copy> Ord for Rational<I>
+impl<I: Integer> Ord for Rational<I>
 where
     Rational<I>: PartialOrd,
 {
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
         self.partial_cmp(other).unwrap()
+    }
+}
+
+impl<I: Integer> Add for Rational<I> {
+    type Output = Self;
+
+    fn add(self, rhs: Self) -> Self {
+        Self::new(self.num * rhs.den + rhs.num * self.den, self.den * rhs.den)
+    }
+}
+
+impl<I: Integer> Sub for Rational<I> {
+    type Output = Self;
+
+    fn sub(self, rhs: Self) -> Self {
+        Self::new(self.num * rhs.den - rhs.num * self.den, self.den * rhs.den)
+    }
+}
+
+impl<I: Integer> Mul for Rational<I> {
+    type Output = Self;
+
+    fn mul(self, rhs: Self) -> Self::Output {
+        Self::new(self.num * rhs.num, self.den * rhs.den)
+    }
+}
+
+impl<I: Integer> Div for Rational<I> {
+    type Output = Self;
+
+    fn div(self, rhs: Self) -> Self::Output {
+        Self::new(self.num * rhs.den, rhs.num * rhs.den)
+    }
+}
+
+impl<I: Integer> IntDiv for Rational<I> {
+    type Output = Self;
+
+    fn int_div(self, rhs: Self) -> Self::Output {
+        self.div(rhs)
+    }
+}
+
+impl <I: Integer> Neg for Rational<I> {
+    type Output = Self;
+
+    fn neg(&self) -> Self::Output {
+        Self::new(self.num.neg(), self.den)
+    }
+}
+
+impl<I: Integer> Reciprocal for Rational<I> {
+    type Output = Self;
+
+    fn reciprocal(&self) -> Self::Output {
+        Self {
+            num: self.den,
+            den: self.num
+        }
     }
 }
 

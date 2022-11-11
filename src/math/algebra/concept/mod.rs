@@ -15,3 +15,7 @@ pub use signed::*;
 pub use tensor::*;
 pub use variant::*;
 pub use vector::*;
+
+pub type Decimal = bigdecimal::BigDecimal;
+pub type IntX = num::BigInt;
+pub type UIntX = num::BigUint;

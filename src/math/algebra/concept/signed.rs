@@ -1,6 +1,6 @@
 use crate::math::algebra::*;
 
-pub trait Signed {}
+pub trait Signed: Neg<Output = Self> {}
 
 pub trait Unsigned {}
 

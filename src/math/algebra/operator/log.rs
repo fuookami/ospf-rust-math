@@ -1,28 +1,38 @@
-use crate::math::ordinary;
-use rust_decimal::Decimal;
+use bigdecimal::num_bigint::ToBigInt;
 
-pub trait Log<Base = Self> {
+use crate::math::algebra::*;
+
+pub trait Log<Base: FloatingNumber = Self> {
     type Output;
 
     fn log(self, base: Base) -> Option<Self::Output>;
-    fn lg2(self) -> Option<Self::Output>;
-    fn lg(self) -> Option<Self::Output>;
-    fn ln(self) -> Option<Self::Output>;
+    
+    fn lg2(self) -> Option<Self::Output> {
+        self.log(Base::TWO)
+    }
+
+    fn lg(self) -> Option<Self::Output> {
+        self.log(Base::TEN)
+    }
+
+    fn ln(self) -> Option<Self::Output> {
+        self.log(Base::E)
+    }
 }
 
-fn log<Lhs: Log<Rhs>, Rhs>(lhs: Lhs, rhs: Rhs) -> Option<Lhs::Output> {
+fn log<Lhs: Log<Rhs>, Rhs: FloatingNumber>(lhs: Lhs, rhs: Rhs) -> Option<Lhs::Output> {
     lhs.log(rhs)
 }
 
-fn lg2<Lhs: Log<Rhs>, Rhs>(lhs: Lhs) -> Option<Lhs::Output> {
+fn lg2<Lhs: Log<Rhs>, Rhs: FloatingNumber>(lhs: Lhs) -> Option<Lhs::Output> {
     lhs.lg2()
 }
 
-fn lg<Lhs: Log<Rhs>, Rhs>(lhs: Lhs) -> Option<Lhs::Output> {
+fn lg<Lhs: Log<Rhs>, Rhs: FloatingNumber>(lhs: Lhs) -> Option<Lhs::Output> {
     lhs.lg()
 }
 
-fn ln<Lhs: Log<Rhs>, Rhs>(lhs: Lhs) -> Option<Lhs::Output> {
+fn ln<Lhs: Log<Rhs>, Rhs: FloatingNumber>(lhs: Lhs) -> Option<Lhs::Output> {
     lhs.ln()
 }
 
@@ -51,6 +61,22 @@ macro_rules! int_log_template {
 }
 int_log_template! { i8 i16 i32 i64 i128 u8 u16 u32 u64 u128 }
 
+impl Log<Decimal> for IntX {
+    type Output = Decimal;
+
+    fn log(self, base: Self) -> Option<Self::Output> {
+        Decimal::new(self, 1).log(Decimal::new(base, 1))
+    }
+}
+
+impl Log<Decimal> for UIntX {
+    type Output = Decimal;
+
+    fn log(self, base: Self) -> Option<Self::Output> {
+        Decimal::new(self.to_bigint(), 1).log(Decimal::new(base.to_bigint(), 1))
+    }
+}
+
 macro_rules! floating_log_template {
     ($($type:ty)*) => ($(
         impl Log for $type {
@@ -58,18 +84,6 @@ macro_rules! floating_log_template {
 
             fn log(self, base: Self) -> Option<Self::Output> {
                 Some(self.log(base))
-            }
-
-            fn lg2(self) -> Option<Self::Output> {
-                Some(self.log2())
-            }
-
-            fn lg(self) -> Option<Self::Output> {
-                Some(self.log10())
-            }
-
-            fn ln(self) -> Option<Self::Output> {
-                Some(self.ln())
             }
         }
     )*);

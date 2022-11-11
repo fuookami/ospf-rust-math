@@ -42,7 +42,7 @@ macro_rules! floating_abs_template {
             type Output = $type;
 
             fn abs(&self) -> Self::Output {
-                if *self < 0. { -self } else { self.clone }
+                if *self < 0. { -self } else { self.clone() }
             }
         }
     )*)
@@ -53,7 +53,7 @@ impl Abs for IntX {
     type Output = Self;
 
     fn abs(&self) -> Self::Output {
-        if self < &IntX::from(0) { -self } else { self.clone }
+        if self < &IntX::from(0) { -self } else { self.clone() }
     }
 }
 

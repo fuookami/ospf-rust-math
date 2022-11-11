@@ -18,8 +18,3 @@ pub use value_range::*;
 
 // algorithms
 pub mod ordinary;
-
-pub type Decimal = rust_decimal::Decimal;
-pub type Flt = num::BigRational;
-pub type IntX = ibig::IBig;
-pub type UIntX = ibig::UBig;

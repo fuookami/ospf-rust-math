@@ -1,4 +1,4 @@
-use rust_decimal::Decimal;
+use crate::math::algebra::*;
 
 pub trait IntDiv<Rhs = Self> {
     type Output;
@@ -21,7 +21,7 @@ macro_rules! int_int_div_template {
         }
     )*)
 }
-int_int_div_template! { u8 u16 u32 u64 u128 i8 i16 i32 i64 i128 }
+int_int_div_template! { i8 i16 i32 i64 i128 IntX u8 u16 u32 u64 u128 UIntX }
 
 macro_rules! floating_int_div_template {
     ($($type:ty)*) => ($(
