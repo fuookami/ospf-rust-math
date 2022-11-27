@@ -1,5 +1,5 @@
 use crate::math::algebra::*;
-use std::ops::{Add, Div, Mul, Sub, AddAssign, SubAssign};
+use std::ops::{Add, AddAssign, Div, Mul, Sub, SubAssign};
 
 pub(self) trait RationalConstructor<I: Integer> {
     fn new(num: I, den: I) -> Self;
@@ -200,9 +200,7 @@ impl<I: Integer> IntDiv for Rational<I> {
     }
 }
 
-impl<I: Integer> Log<f64> for Rational<I> {
-
-}
+impl<I: Integer> Log<f64> for Rational<I> {}
 
 impl<I: Integer> Neg for Rational<I> {
     type Output = Self;
@@ -334,7 +332,6 @@ impl PartialOrd for Rtn128 {
         Some(lhs.cmp(&rhs))
     }
 }
-
 
 impl From<&Rtn128> for f64 {
     fn from(value: &Rtn128) -> Self {

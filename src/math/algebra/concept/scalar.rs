@@ -1,8 +1,8 @@
 use super::*;
-use crate::math::algebra::{ IntX, UIntX };
 use crate::math::algebra::operator::{
     Abs, Cross, Exp, IntDiv, Log, Pow, PowF, RangeTo, Reciprocal,
 };
+use crate::math::algebra::{IntX, UIntX};
 use std::ops::{Div, Mul, Neg, Rem};
 
 pub trait Scalar: Arithmetic + PlusSemiGroup + TimesSemiGroup + Bound + Cross + Abs {}

@@ -40,3 +40,6 @@ const INF: Infinity = Infinity {};
 
 struct NegativeInfinity {}
 const NEG_INF: NegativeInfinity = NegativeInfinity {};
+
+struct Nan {}
+const NAN: Nan = Nan {};

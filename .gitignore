@@ -1,3 +1,4 @@
 /Cargo.lock
 [Tt]arget/
-/.vs
+.vs
+.idea

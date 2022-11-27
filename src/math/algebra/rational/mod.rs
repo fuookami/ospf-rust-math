@@ -1,5 +1,5 @@
-pub mod rational;
 pub mod ratio;
+pub mod rational;
 
-pub use rational::*;
 pub use ratio::*;
+pub use rational::*;

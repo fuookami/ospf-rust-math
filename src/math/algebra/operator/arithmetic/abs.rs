@@ -53,13 +53,17 @@ impl Abs for IntX {
     type Output = Self;
 
     fn abs(&self) -> Self::Output {
-        if self < &IntX::from(0) { -self } else { self.clone() }
+        if self < &IntX::from(0) {
+            -self
+        } else {
+            self.clone()
+        }
     }
 }
 
 impl Abs for UIntX {
     type Output = Self;
-    
+
     fn abs(&self) -> Self::Output {
         self.clone
     }

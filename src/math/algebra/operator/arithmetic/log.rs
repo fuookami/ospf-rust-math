@@ -6,7 +6,7 @@ pub trait Log<Base: FloatingNumber = Self> {
     type Output;
 
     fn log(self, base: Base) -> Option<Self::Output>;
-    
+
     fn lg2(self) -> Option<Self::Output> {
         self.log(Base::TWO)
     }
