@@ -29,7 +29,7 @@ macro_rules! unsigned_neg_template {
             type Output = Self;
 
             fn neg(&self) -> Self::Output {
-                <$type>::MAX - self
+                <$type>::MAX - self + 1
             }
         }
     )*)
