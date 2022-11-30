@@ -5,7 +5,7 @@ use crate::math::algebra::operator::{
 use crate::math::algebra::{IntX, UIntX};
 use std::ops::{Div, Mul, Neg, Rem};
 
-pub trait Scalar: Arithmetic + PlusSemiGroup + TimesSemiGroup + Bound + Cross + Abs {}
+pub trait Scalar: Arithmetic + PlusSemiGroup + TimesSemiGroup + Bounded + Cross + Abs {}
 
 pub trait RealNumber: Scalar + Precision + Invariant {
     const TWO: Self;

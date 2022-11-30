@@ -1,9 +1,9 @@
 use crate::math::algebra::*;
 
-enum ValueWrapper<T: Arithmetic> {
+pub enum ValueWrapper<T: Arithmetic> {
     Value(T),
     NegInf,
-    Inf
+    Inf,
 }
 
 impl<T: Arithmetic> From<Infinity> for ValueWrapper<T> {

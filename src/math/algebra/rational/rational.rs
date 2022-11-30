@@ -235,7 +235,7 @@ where
     }
 }
 
-impl<I: Integer> Bound for Rational<I> {
+impl<I: Integer> Bounded for Rational<I> {
     const MINIMUM: Option<Self> = Some(Self::new(I::MINIMUM, I::one));
     const MAXIMUM: Option<Self> = Some(Self::new(I::MAXIMUM, I::ONE));
     const POSITIVE_MINIMUM: Self = Self::new(I::ONE, I::MAXIMUM);
