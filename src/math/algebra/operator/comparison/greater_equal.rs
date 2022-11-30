@@ -17,7 +17,7 @@ impl<T: Arithmetic + Abs<Output = T> + Neg<Output = T>> GreaterEqual<T> {
 
     pub fn new_with(precision: T) -> Self {
         let actual_precision = precision.abs();
-        let neg_precision = precision.neg();
+        let neg_precision = actual_precision.neg();
         Self {
             precision: actual_precision,
             neg_precision: neg_precision,
