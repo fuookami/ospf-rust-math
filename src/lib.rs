@@ -4,6 +4,12 @@
 #![feature(specialization)]
 #![feature(generators)]
 #![feature(generator_trait)]
-pub mod math;
+pub mod algebra;
+pub mod combinatorics;
+pub mod functional;
+pub mod geometry;
 
-pub use math::concept::*;
+pub use algebra::*;
+pub use combinatorics::*;
+pub use functional::*;
+pub use geometry::*;

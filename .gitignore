@@ -1,4 +1,7 @@
-/Cargo.lock
+Cargo.lock
 [Tt]arget/
-.vs
-.idea
+[Dd]ebug/
+[Rr]elease/
+.vs/
+.idea/
+.vscode/settings.json
