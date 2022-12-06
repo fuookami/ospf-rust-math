@@ -8,7 +8,7 @@ pub struct GreaterEqual<T: Arithmetic + Abs<Output = T> + Neg<Output = T>> {
 }
 
 impl<T: Arithmetic + Abs<Output = T> + Neg<Output = T>> GreaterEqual<T> {
-    pub fn new()
+    pub fn new() -> Self
     where
         T: Precision,
     {

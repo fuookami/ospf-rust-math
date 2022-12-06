@@ -7,7 +7,7 @@ pub struct LessEqual<T: Arithmetic + Abs<Output = T> + Neg<Output = T>> {
 }
 
 impl<T: Arithmetic + Abs<Output = T> + Neg<Output = T>> LessEqual<T> {
-    pub fn new()
+    pub fn new() -> Self
     where
         T: Precision,
     {

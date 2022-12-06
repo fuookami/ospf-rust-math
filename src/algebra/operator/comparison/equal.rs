@@ -8,7 +8,7 @@ pub struct Equal<T: Arithmetic + Abs<Output = T>> {
 }
 
 impl<T: Arithmetic + Abs<Output = T>> Equal<T> {
-    pub fn new()
+    pub fn new() -> Self
     where
         T: Precision,
     {

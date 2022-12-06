@@ -8,7 +8,7 @@ pub struct Less<T: Arithmetic + Abs<Output = T> + Neg<Output = T>> {
 }
 
 impl<T: Arithmetic + Abs<Output = T> + Neg<Output = T>> Less<T> {
-    pub fn new()
+    pub fn new() -> Self
     where
         T: Precision,
     {

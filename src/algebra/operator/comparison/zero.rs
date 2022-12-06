@@ -6,7 +6,7 @@ pub struct Zero<T: Arithmetic + Abs<Output = T>> {
 }
 
 impl<T: Arithmetic + Abs<Output = T>> Zero<T> {
-    pub fn new()
+    pub fn new() -> Self
     where
         T: Precision,
     {
