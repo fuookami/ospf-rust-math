@@ -9,3 +9,7 @@ pub use interval::*;
 pub use value_range::*;
 pub use value_range_stc::*;
 pub use value_wrapper::*;
+
+struct IllegalArgumentError {
+    msg: String,
+}

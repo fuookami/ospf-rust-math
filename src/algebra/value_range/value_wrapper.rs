@@ -1,3 +1,4 @@
+use super::*;
 use crate::algebra::concept::*;
 use std::ops::{Add, Div, Mul, Sub};
 
@@ -181,15 +182,11 @@ impl<T: RealNumber> PartialOrd<T> for ValueWrapper<T> {
     }
 }
 
-pub struct ValueWrapperCalculationArgumentError {
-    msg: String,
-}
-
 impl<'a, T: Arithmetic> Add<&'a T> for &'a ValueWrapper<T>
 where
     &'a T: Add<&'a T, Output = T>,
 {
-    type Output = Result<ValueWrapper<T>, ValueWrapperCalculationArgumentError>;
+    type Output = Result<ValueWrapper<T>, IllegalArgumentError>;
 
     fn add(self, rhs: &'a T) -> Self::Output {
         match self {
@@ -204,11 +201,11 @@ impl<'a, T: RealNumber> Add<&'a T> for ValueWrapper<T>
 where
     &'a T: Add<&'a T, Output = T>,
 {
-    type Output = Result<ValueWrapper<T>, ValueWrapperCalculationArgumentError>;
+    type Output = Result<ValueWrapper<T>, IllegalArgumentError>;
 
     fn add(self, rhs: &'a T) -> Self::Output {
         if rhs.is_nan() {
-            return Err(ValueWrapperCalculationArgumentError {
+            return Err(IllegalArgumentError {
                 msg: String::from("Illegal argument NaN for value range!!!"),
             });
         }
@@ -216,14 +213,14 @@ where
         if rhs.is_inf() {
             match self {
                 ValueWrapper::Value(_) | ValueWrapper::Inf => Ok(ValueWrapper::Inf),
-                ValueWrapper::NegInf => Err(ValueWrapperCalculationArgumentError {
+                ValueWrapper::NegInf => Err(IllegalArgumentError {
                     msg: String::from("Invalid plus between inf and -inf!!!"),
                 }),
             }
         } else if rhs.is_neg_inf() {
             match self {
                 ValueWrapper::Value(_) | ValueWrapper::NegInf => Ok(ValueWrapper::NegInf),
-                ValueWrapper::Inf => Err(ValueWrapperCalculationArgumentError {
+                ValueWrapper::Inf => Err(IllegalArgumentError {
                     msg: String::from("Invalid plus between inf and -inf!!!"),
                 }),
             }
@@ -241,7 +238,7 @@ impl<'a, T: Arithmetic> Add for &'a ValueWrapper<T>
 where
     &'a T: Add<&'a T, Output = T>,
 {
-    type Output = Result<ValueWrapper<T>, ValueWrapperCalculationArgumentError>;
+    type Output = Result<ValueWrapper<T>, IllegalArgumentError>;
 
     fn add(self, rhs: &'a ValueWrapper<T>) -> Self::Output {
         match self {
@@ -252,13 +249,13 @@ where
             },
             ValueWrapper::Inf => match rhs {
                 ValueWrapper::Value(_) | ValueWrapper::Inf => Ok(ValueWrapper::Inf),
-                ValueWrapper::NegInf => Err(ValueWrapperCalculationArgumentError {
+                ValueWrapper::NegInf => Err(IllegalArgumentError {
                     msg: String::from("Invalid plus between inf and -inf!!!"),
                 }),
             },
             ValueWrapper::NegInf => match rhs {
                 ValueWrapper::Value(_) | ValueWrapper::NegInf => Ok(ValueWrapper::NegInf),
-                ValueWrapper::Inf => Err(ValueWrapperCalculationArgumentError {
+                ValueWrapper::Inf => Err(IllegalArgumentError {
                     msg: String::from("Invalid plus between inf and -inf!!!"),
                 }),
             },
@@ -270,7 +267,7 @@ impl<'a, T: Arithmetic> Sub<&'a T> for &'a ValueWrapper<T>
 where
     &'a T: Sub<&'a T, Output = T>,
 {
-    type Output = Result<ValueWrapper<T>, ValueWrapperCalculationArgumentError>;
+    type Output = Result<ValueWrapper<T>, IllegalArgumentError>;
 
     fn sub(self, rhs: &'a T) -> Self::Output {
         match self {
@@ -285,11 +282,11 @@ impl<'a, T: RealNumber> Sub<&'a T> for &'a ValueWrapper<T>
 where
     &'a T: Sub<&'a T, Output = T>,
 {
-    type Output = Result<ValueWrapper<T>, ValueWrapperCalculationArgumentError>;
+    type Output = Result<ValueWrapper<T>, IllegalArgumentError>;
 
     fn sub(self, rhs: &'a T) -> Self::Output {
         if rhs.is_nan() {
-            return Err(ValueWrapperCalculationArgumentError {
+            return Err(IllegalArgumentError {
                 msg: String::from("Illegal argument NaN for value range!!!"),
             });
         }
@@ -297,14 +294,14 @@ where
         if rhs.is_inf() {
             match self {
                 ValueWrapper::Value(_) | ValueWrapper::NegInf => Ok(ValueWrapper::NegInf),
-                ValueWrapper::Inf => Err(ValueWrapperCalculationArgumentError {
+                ValueWrapper::Inf => Err(IllegalArgumentError {
                     msg: String::from("Invalid sub between inf and inf!!!"),
                 }),
             }
         } else if rhs.is_neg_inf() {
             match self {
                 ValueWrapper::Value(_) | ValueWrapper::Inf => Ok(ValueWrapper::Inf),
-                ValueWrapper::NegInf => Err(ValueWrapperCalculationArgumentError {
+                ValueWrapper::NegInf => Err(IllegalArgumentError {
                     msg: String::from("Invalid sub between -inf and -inf!!!"),
                 }),
             }
@@ -322,7 +319,7 @@ impl<'a, T: Arithmetic> Sub for &'a ValueWrapper<T>
 where
     &'a T: Sub<&'a T, Output = T>,
 {
-    type Output = Result<ValueWrapper<T>, ValueWrapperCalculationArgumentError>;
+    type Output = Result<ValueWrapper<T>, IllegalArgumentError>;
 
     fn sub(self, rhs: &'a ValueWrapper<T>) -> Self::Output {
         match self {
@@ -333,13 +330,13 @@ where
             },
             ValueWrapper::Inf => match rhs {
                 ValueWrapper::Value(_) | ValueWrapper::NegInf => Ok(ValueWrapper::Inf),
-                ValueWrapper::Inf => Err(ValueWrapperCalculationArgumentError {
+                ValueWrapper::Inf => Err(IllegalArgumentError {
                     msg: String::from("Invalid sub between inf and inf!!!"),
                 }),
             },
             ValueWrapper::NegInf => match rhs {
                 ValueWrapper::Value(_) | ValueWrapper::Inf => Ok(ValueWrapper::NegInf),
-                ValueWrapper::NegInf => Err(ValueWrapperCalculationArgumentError {
+                ValueWrapper::NegInf => Err(IllegalArgumentError {
                     msg: String::from("Invalid sub between -inf and -inf!!!"),
                 }),
             },
@@ -351,7 +348,7 @@ impl<'a, T: Arithmetic> Mul<&'a T> for &'a ValueWrapper<T>
 where
     &'a T: Mul<&'a T, Output = T>,
 {
-    type Output = Result<ValueWrapper<T>, ValueWrapperCalculationArgumentError>;
+    type Output = Result<ValueWrapper<T>, IllegalArgumentError>;
 
     fn mul(self, rhs: &'a T) -> Self::Output {
         match self {
@@ -378,11 +375,11 @@ impl<'a, T: RealNumber> Mul<&'a T> for &'a ValueWrapper<T>
 where
     &'a T: Mul<&'a T, Output = T>,
 {
-    type Output = Result<ValueWrapper<T>, ValueWrapperCalculationArgumentError>;
+    type Output = Result<ValueWrapper<T>, IllegalArgumentError>;
 
     fn mul(self, rhs: &'a T) -> Self::Output {
         if rhs.is_nan() {
-            return Err(ValueWrapperCalculationArgumentError {
+            return Err(IllegalArgumentError {
                 msg: String::from("Illegal argument NaN for value range!!!"),
             });
         }
@@ -423,7 +420,7 @@ impl<'a, T: RealNumber> Mul for &'a ValueWrapper<T>
 where
     &'a T: Mul<&'a T, Output = T>,
 {
-    type Output = Result<ValueWrapper<T>, ValueWrapperCalculationArgumentError>;
+    type Output = Result<ValueWrapper<T>, IllegalArgumentError>;
 
     fn mul(self, rhs: &'a ValueWrapper<T>) -> Self::Output {
         match self {
@@ -474,7 +471,7 @@ impl<'a, T: Arithmetic> Div<&'a T> for &'a ValueWrapper<T>
 where
     &'a T: Div<&'a T, Output = T>,
 {
-    type Output = Result<ValueWrapper<T>, ValueWrapperCalculationArgumentError>;
+    type Output = Result<ValueWrapper<T>, IllegalArgumentError>;
 
     fn div(self, rhs: &'a ValueWrapper<T>) -> Self::Output {
         match self {
@@ -501,11 +498,11 @@ impl<'a, T: RealNumber> Div<&'a T> for &'a ValueWrapper<T>
 where
     &'a T: Div<&'a T, Output = T>,
 {
-    type Output = Result<ValueWrapper<T>, ValueWrapperCalculationArgumentError>;
+    type Output = Result<ValueWrapper<T>, IllegalArgumentError>;
 
     fn div(self, rhs: &'a ValueWrapper<T>) -> Self::Output {
         if rhs.is_nan() {
-            return Err(ValueWrapperCalculationArgumentError {
+            return Err(IllegalArgumentError {
                 msg: String::from("Illegal argument NaN for value range!!!"),
             });
         }
@@ -513,20 +510,20 @@ where
         if rhs.is_inf() {
             match self {
                 ValueWrapper::Value(_) => Ok(ValueWrapper::from(T::ZERO)),
-                ValueWrapper::Inf => Err(ValueWrapperCalculationArgumentError {
+                ValueWrapper::Inf => Err(IllegalArgumentError {
                     msg: String::from("Invalid div between inf and inf!!!"),
                 }),
-                ValueWrapper::NegInf => Err(ValueWrapperCalculationArgumentError {
+                ValueWrapper::NegInf => Err(IllegalArgumentError {
                     msg: String::from("Invalid div between -inf and inf!!!"),
                 }),
             }
         } else if rhs.is_neg_inf() {
             match self {
                 ValueWrapper::Value(_) => Ok(ValueWrapper::from(T::ZERO)),
-                ValueWrapper::Inf => Err(ValueWrapperCalculationArgumentError {
+                ValueWrapper::Inf => Err(IllegalArgumentError {
                     msg: String::from("Invalid div between inf and -inf!!!"),
                 }),
-                ValueWrapper::NegInf => Err(ValueWrapperCalculationArgumentError {
+                ValueWrapper::NegInf => Err(IllegalArgumentError {
                     msg: String::from("Invalid div between -inf and -inf!!!"),
                 }),
             }
@@ -556,7 +553,7 @@ impl<'a, T: Arithmetic> Div for &'a ValueWrapper<T>
 where
     &'a T: Div<&'a T, Output = T>,
 {
-    type Output = Result<ValueWrapper<T>, ValueWrapperCalculationArgumentError>;
+    type Output = Result<ValueWrapper<T>, IllegalArgumentError>;
 
     fn div(self, rhs: &'a ValueWrapper<T>) -> Self::Output {
         match self {
@@ -572,10 +569,10 @@ where
                         Ok(ValueWrapper::NegInf)
                     }
                 }
-                ValueWrapper::Inf => Err(ValueWrapperCalculationArgumentError {
+                ValueWrapper::Inf => Err(IllegalArgumentError {
                     msg: String::from("Invalid div between inf and inf!!!"),
                 }),
-                ValueWrapper::NegInf => Err(ValueWrapperCalculationArgumentError {
+                ValueWrapper::NegInf => Err(IllegalArgumentError {
                     msg: String::from("Invalid div between inf and -inf!!!"),
                 }),
             },
@@ -587,10 +584,10 @@ where
                         Ok(ValueWrapper::Inf)
                     }
                 }
-                ValueWrapper::Inf => Err(ValueWrapperCalculationArgumentError {
+                ValueWrapper::Inf => Err(IllegalArgumentError {
                     msg: String::from("Invalid div between -inf and inf!!!"),
                 }),
-                ValueWrapper::NegInf => Err(ValueWrapperCalculationArgumentError {
+                ValueWrapper::NegInf => Err(IllegalArgumentError {
                     msg: String::from("Invalid div between -inf and -inf!!!"),
                 }),
             },

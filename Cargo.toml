@@ -7,6 +7,7 @@ description = "A math utils for ospf-rust."
 license = "MIT OR Apache-2.0"
 
 [dependencies]
+ospf_rust_base = { git="https://github.com/fuookami/ospf-rust-base.git" }
 ospf_rust_meta_programming = { git="https://github.com/fuookami/ospf-rust-meta-programming.git" }
 num = "*"
 bigdecimal = "*"
